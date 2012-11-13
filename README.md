@@ -35,9 +35,9 @@ with.
 * Brokerless
 * High throughput
 * Usually low latency
-* Relatively good reliability
+* High reliability
 * CPU and memory efficient
-* Cross UNIX implementation
+* Cross UNIX compatable
 * Multiple language implementations
 * Very few module dependencies
 * Feature stack is modular and optional
@@ -51,7 +51,13 @@ Python - TODO
 Perl - TODO
 
 ## TODO
+* Far more robust testing
+* A lot more documentation
+* Perl implementation
+* Python implementation
+* Plugable encoding
+* Plugable compression
 * Cross box delivery (reference implementation)
-* Crypto
-
+* Crypto: message signing and verification
+* Crypto: message encryption and validation
 
