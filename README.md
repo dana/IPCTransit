@@ -18,7 +18,7 @@ IPCTransit.send(
 Elsewhere on this box:
 
 ```ruby
-> message = IPCTransit.receive('qname' => 'somewhere_else')
+message = IPCTransit.receive('qname' => 'somewhere_else')
 ```
 
 ## Concept
