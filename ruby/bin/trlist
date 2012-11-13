@@ -1,0 +1,10 @@
+#!/usr/bin/env ruby
+require 'ipc_transit'
+
+
+IPCTransit.all_queues.each_pair do |qname, info|
+    puts "#{qname} = #{info['count']}"
+end
+
+#{"tqueue"=>{"qid"=>3, "count"=>0}, "test_qname"=>{"qid"=>2, "count"=>0}}
+#

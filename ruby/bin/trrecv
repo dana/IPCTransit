@@ -1,0 +1,15 @@
+#!/usr/bin/env ruby
+require 'ipc_transit'
+require 'json'
+
+qname = ARGV[0]
+nowait = ARGV[1]
+
+
+#puts qname
+#puts message
+
+while ret = IPCTransit.receive('qname' => qname, 'nowait' => 1)
+    puts ret
+end
+

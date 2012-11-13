@@ -1,0 +1,10 @@
+#!/usr/bin/env ruby
+require 'ipc_transit'
+require 'json'
+
+qname = ARGV[0]
+message = JSON.parse(ARGV[1])
+
+
+ret = IPCTransit.send('message' => message, 'qname' => qname)
+puts ret
