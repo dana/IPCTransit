@@ -7,13 +7,19 @@ A high-performance, brokerless, cross-platform message queue system.
 
 ## Usage
 Ruby example:
-> require 'ipc_transit'
-> IPCTransit.send(
->    'message' => { 'something' => { 'very' => ['interesting']}},
->    'qname' => 'somewhere_else')
->
-> #Elsewhere on this box
+
+```ruby
+require 'ipc_transit'
+IPCTransit.send(
+    'message' => { 'something' => { 'very' => ['interesting']}},
+    'qname' => 'somewhere_else')
+```
+
+Elsewhere on this box:
+
+```ruby
 > message = IPCTransit.receive('qname' => 'somewhere_else')
+```
 
 ## Concept
 System V IPC message queues are a very old but under-used feature of all
