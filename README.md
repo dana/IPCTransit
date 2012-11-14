@@ -46,12 +46,16 @@ with.
 * Guaranteed delivery
 
 ## Implementations
-Ruby - the first and reference implementation
-Python - TODO
-Perl - TODO
+* Ruby - the first and reference implementation
+* Python - TODO
+* Perl - TODO
 
 ## TODO
 * Far more robust testing
+** Queue full write
+** Message too large for queue
+* Allow custom config directory path
+* Handle large messages
 * A lot more documentation
 * Perl implementation
 * Python implementation
@@ -60,4 +64,9 @@ Perl - TODO
 * Cross box delivery (reference implementation)
 * Crypto: message signing and verification
 * Crypto: message encryption and validation
+
+## BUGS
+### Ruby
+* Blocking receive on empty queue requires kill -9
+* Should not arbitrarily use queue IDs; use ftok instead
 
