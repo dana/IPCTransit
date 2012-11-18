@@ -1,14 +1,6 @@
 require 'test/unit'
 require 'ipc_transit'
-
-#kind of ghetto, but I don't have a better way right now
-def drain_test_queue
-    begin
-        while ret = IPCTransit.receive('qname' => 'test_qname', 'nowait' => 1)
-        end
-    rescue Exception => msg
-    end
-end
+require 'ipc_transit/test'
 
 class TestIPCTransit < Test::Unit::TestCase
     def test_typical
