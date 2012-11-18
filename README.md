@@ -69,6 +69,7 @@ with.
 
 ## TODO
 * Far more robust testing
+* Decouple the wire header arguments from their encoded name.  For example, 'd' is the destination field in the wire header, but the argument should be called 'destination' in the send method
 * Queue full write
 * Message too large for queue
 * Allow custom config directory path
