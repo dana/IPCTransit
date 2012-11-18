@@ -36,7 +36,7 @@ class TestIPCTransit < Test::Unit::TestCase
                 'c' => 'none',
                 'something' => 'else',
                 'x' => { 'this' => 'that' },
-                'once' => ['more',2],
+                'once' => ['more',2]
         )
         ret = IPCTransit.receive('qname' => 'test_qname', 'nowait' => 1)
         assert(ret, 'IPCTransit.receive returned true')
