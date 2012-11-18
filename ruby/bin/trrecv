@@ -11,6 +11,6 @@ nowait = ARGV[1]
 #puts message
 
 while ret = IPCTransit.receive('qname' => qname, 'nowait' => 1)
-    puts ret
+    puts JSON.pretty_generate(ret)
 end
 
