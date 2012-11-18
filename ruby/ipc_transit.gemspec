@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
   s.date = %q{2012-11-17}
   s.description = %q{Brokerless Message Queue}
   s.email = %q{diederich@gmail.com}
-  s.files = ['Rakefile', 'lib/ipc_transit.rb', 'bin/trrecv', 'bin/trsend', 'bin/trlist','bin/transitd','bin/trserver']
+  s.files = ['Rakefile', 'lib/ipc_transit.rb', 'lib/ipc_transit/test.rb', 'bin/trrecv', 'bin/trsend', 'bin/trlist','bin/transitd','bin/trserver']
   s.test_files = ['test/tc_transit_simple.rb','test/tc_transit_remote.rb']
   s.homepage = %q{http://rubygems.org/gems/ipc_transit}
   s.require_paths = ['lib']
