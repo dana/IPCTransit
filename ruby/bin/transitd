@@ -1,0 +1,31 @@
+#!/usr/bin/env ruby
+require 'net/http'
+require 'uri'
+require 'ipc_transit'
+
+$url = 'http://127.0.0.1:8726/transit_data'
+
+
+def one_message
+    message = IPCTransit.receive('qname' => 'transitd', 'raw' => 1)
+    if not (serialized_message = message['serialized_wire_data'])
+        raise 'Message did not contain serialized_wire_data'
+    end
+    if not (wire_headers = message['wire_headers'])
+        raise 'Message did not contain wire_headers'
+    end
+    if not (d = wire_headers['d'])
+        raise 'Message did not contain required wire attribite "d"'
+    end
+    postData = Net::HTTP.post_form(URI.parse($url), 
+                               {'data'=>serialized_message})
+    puts postData.body
+end
+while 1
+    begin
+        one_message()
+    rescue Exception => e
+        puts "Exception: #{e}"
+    end
+end
+

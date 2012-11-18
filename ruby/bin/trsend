@@ -2,9 +2,14 @@
 require 'ipc_transit'
 require 'json'
 
+
 qname = ARGV[0]
 message = JSON.parse(ARGV[1])
+dest = ARGV[2]
 
-
-ret = IPCTransit.send('message' => message, 'qname' => qname)
+if dest.nil?
+    ret = IPCTransit.send('message' => message, 'qname' => qname)
+else
+    ret = IPCTransit.send('message' => message, 'qname' => qname, 'd' => dest)
+end
 puts ret

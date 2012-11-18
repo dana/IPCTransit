@@ -3,7 +3,7 @@ require 'SysVIPC'
 include SysVIPC
 
 ##
-# Fast, serverless message queueing
+# Fast, brokerless message queueing
 #
 # Author::    Dana M. Diederich (diederich@gmail.com)
 # Copyright:: Copyright (c) 2012 Dana M. Diederich
@@ -13,15 +13,18 @@ class IPCTransit
     @@queues = {}
 
     @@ipc_transit_wire_header_args = {
-        'e' => {
+        'e' => { #encoding
             'json' => 1,
             'yaml' => 1,
         },
-        'c' => {
+        'c' => { #compression
             'zlib' => 1,
             'snappy' => 1,
             'none' => 1,
         },
+        'd' => 1, #destination address
+        't' => 1, #hop TTL
+        'q' => 1, #destination qname
     }
     @@ipc_transit_std_args = {
         'message' => 1,
@@ -42,14 +45,25 @@ class IPCTransit
         ret = nil
         flags = IPC_NOWAIT
         begin
+            if args['d']
+                args['q'] = args['qname']
+                args['qname'] = 'transitd'
+                if not args['t']
+                    args['t'] = 9
+                end
+            end
             key = self.get_queue_id(args)
             mq = MessageQueue.new(key, IPC_CREAT | 0666)
-            ret = mq.snd(1, pack_message(args), flags)
+            if args['serialized_wire_data'].nil?
+                pack_message(args)
+            end
+            ret = mq.snd(1, args['serialized_wire_data'], flags)
         rescue Exception => msg
             puts "Exception: #{msg}"
         end
         return ret
     end
+
     ##
     #  Receive a message from a queue
     #
@@ -73,8 +87,12 @@ class IPCTransit
             mq = MessageQueue.new(key, IPC_CREAT | 0666)
             args['serialized_wire_data'] = mq.receive(0, 10000, flags)
             self.unpack_data(args)
+            #at this point I need to see if this is a remote transit
+            #if it is, then do not thaw the message proper
+            args['message'] = self.transit_thaw(args)
         rescue Exception => msg
 #            puts "Exception: #{msg}"
+#            need to do something smarter with this
         end
         if args['raw']
             ret = args;
@@ -83,10 +101,20 @@ class IPCTransit
         end
         return ret
     end
+
     def self.all_queue_info()
         self.gather_queue_info()
         return @@queues
     end
+
+    ##
+    #  Return info about all of the queues on the system
+    #
+    # Arguments: none
+    #
+    # Returns: hash. key is qname, value contains:
+    #   qid - integer queue ID
+    #   count - number of messages in this queue
 
     def self.all_queues()
         ret = {}
@@ -103,7 +131,38 @@ class IPCTransit
         return ret
     end
 
+    ##
+    #  Unpack the wire meta data from a message
+    #
+    # Arguments:
+    #  serialized_wire_data - the serialized message
+    #
+    # Returns: (in the passed args)
+    #   wire_headers - all of the wire headers
+    #   serialized_message - the message itself, still serialized
+
+    def self.unpack_data(args)
+        stuff = args['serialized_wire_data'].split(':')
+        offset = Integer(stuff.shift)
+        header_and_message = stuff.join(':')
+        if offset == 0
+            args['serialized_header'] = ''
+        else
+            args['serialized_header'] = header_and_message[0..offset-1]
+            self.thaw_wire_headers(args)
+        end
+        args['serialized_message'] = header_and_message[offset..header_and_message.length]
+        return true
+    end
+#NB: I know this is all hideously inefficient.  I'm still learning Ruby,
+#and I'm focusing on getting this correct first.
+#
+#returns a serialized_message and wire_meta_data
+#takes serialized_wire_data
+
+
     private
+
     def self.get_next_id
         new_id = 1
         @@queues.each_pair do |k,v|
@@ -197,8 +256,8 @@ class IPCTransit
         args['serialized_message'] = self.transit_freeze(args)
         self.serialize_wire_meta(args)
         l = args['serialized_wire_meta_data'].length
-        ret = "#{l}:#{args['serialized_wire_meta_data']}#{args['serialized_message']}"
-        return ret
+        args['serialized_wire_data'] = "#{l}:#{args['serialized_wire_meta_data']}#{args['serialized_message']}"
+        return args['serialized_wire_data']
     end
 
     def self.serialize_wire_meta(args)
@@ -221,25 +280,6 @@ class IPCTransit
         args['serialized_wire_meta_data'] = s
     end
 
-#NB: I know this is all hideously inefficient.  I'm still learning Ruby,
-#and I'm focusing on getting this correct first.
-#
-#returns a serialized_message and wire_meta_data
-#takes serialized_wire_data
-    def self.unpack_data(args)
-        stuff = args['serialized_wire_data'].split(':')
-        offset = Integer(stuff.shift)
-        header_and_message = stuff.join(':')
-        if offset == 0
-            args['serialized_header'] = ''
-        else
-            args['serialized_header'] = header_and_message[0..offset-1]
-            self.thaw_wire_headers(args)
-        end
-        args['serialized_message'] = header_and_message[offset..header_and_message.length]
-        args['message'] = self.transit_thaw(args)
-        return true
-    end
 
     def self.thaw_wire_headers(args)
         h = args['serialized_header']

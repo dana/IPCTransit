@@ -1,0 +1,41 @@
+#!/usr/bin/env ruby
+require 'webrick'
+require 'ipc_transit'
+
+
+class PersistAnswers < WEBrick::HTTPServlet::AbstractServlet
+    def do_POST(request, response)
+        status, content_type, body = handle_data(request)
+
+        response.status = status
+        response['Content-Type'] = content_type
+        response.body = body
+    end
+
+    def handle_data(request)
+        if (data = request.query['data'])
+            qname = handle_message({ 'serialized_wire_data' => data })
+        end
+        return 200, 'text/plain', "Forwarding message to queue '#{qname}'"
+    end
+    def handle_message(args)
+        IPCTransit.unpack_data(args)
+        if not (wire_headers = args['wire_headers'])
+            raise 'Message did not contain wire_headers'
+        end
+        if not (args['qname'] = wire_headers['q'])
+            raise 'Message did not contain required wire attribite "q"'
+        end
+        #at this point we should make sure the message we received
+        #is truly destined for this box
+        #we should also decrement the TTL
+        puts "Forwarding message to queue '#{args['qname']}'"
+        IPCTransit.send(args)
+        return args['qname']
+    end
+end
+
+server = WEBrick::HTTPServer.new(:Port => 8726)
+server.mount '/transit_data', PersistAnswers
+trap "INT" do server.shutdown end
+server.start
