@@ -1,4 +1,4 @@
-# IPCTransit v0.0.1
+# IPCTransit v0.0.2
 A high-performance, brokerless, cross-platform message queue system.
 
 ## Dependencies
@@ -21,6 +21,23 @@ Elsewhere on this box:
 message = IPCTransit.receive('qname' => 'somewhere_else')
 ```
 
+```ruby
+require 'ipc_transit'
+IPCTransit.send(
+    'message' => { 'something' => { 'very' => ['interesting']}},
+    'qname' => 'somewhere_else',
+    'd' => 'some.remote.host')
+```
+
+On 'some.remote.host':
+
+```ruby
+message = IPCTransit.receive('qname' => 'somewhere_else')
+```
+
+In order to do remote send, on the sending box, run bin/transitd, and
+on the remote box, run bin/trserver.
+
 ## Concept
 System V IPC message queues are a very old but under-used feature of all
 modern UNIX operating systems.
@@ -32,7 +49,7 @@ So, for all on-box delivery, there is no server or broker process to deal
 with.
 
 ## Goals
-* Brokerless
+* Brokerless for on-box queue
 * High throughput
 * Usually low latency
 * High reliability
@@ -52,8 +69,8 @@ with.
 
 ## TODO
 * Far more robust testing
-** Queue full write
-** Message too large for queue
+* Queue full write
+* Message too large for queue
 * Allow custom config directory path
 * Handle large messages
 * A lot more documentation
@@ -61,7 +78,6 @@ with.
 * Python implementation
 * Plugable encoding
 * Plugable compression
-* Cross box delivery (reference implementation)
 * Crypto: message signing and verification
 * Crypto: message encryption and validation
 
@@ -69,4 +85,3 @@ with.
 ### Ruby
 * Blocking receive on empty queue requires kill -9
 * Should not arbitrarily use queue IDs; use ftok instead
-
