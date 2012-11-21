@@ -1,5 +1,4 @@
 require 'rubygems'
-require 'json'
 require 'SysVIPC'
 include SysVIPC
 require 'ipc_transit/serialize'
