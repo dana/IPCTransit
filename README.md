@@ -86,3 +86,5 @@ with.
 ### Ruby
 * Blocking receive on empty queue requires kill -9
 * Should not arbitrarily use queue IDs; use ftok instead
+* Allow user-specified masks for transit config files
+* Allow user-specified path for transit config files

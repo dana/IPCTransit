@@ -186,7 +186,8 @@ class IPCTransit
         end
         begin
             self.lock_dir()
-            file = File.open("/tmp/transit/#{qname}", 'w')
+            File.umask(0000)
+            file = File.open("/tmp/transit/#{qname}", 'w', 0666)
             new_qid = get_next_id
             file.puts("qid=#{new_qid}")
             file.puts("qname=#{qname}")
@@ -201,6 +202,7 @@ class IPCTransit
     end
 
     def self.lock_dir()
+        File.umask(0000)
         File.open('/tmp/transit.lock', File::WRONLY|File::EXCL|File::CREAT, 0666)
     end
     def self.unlock_dir()
@@ -211,7 +213,7 @@ class IPCTransit
         self.mk_queue_dir()
         Dir.glob('/tmp/transit/*').each do |filename|
             info = {}
-            file = File.new(filename, 'r')
+            file = File.new(filename, 'r', 0666)
             while (line = file.gets)
                 line.chomp!
                 (key, value) = line.split('=')
