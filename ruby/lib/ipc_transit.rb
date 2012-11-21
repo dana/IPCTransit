@@ -2,6 +2,8 @@ require 'rubygems'
 require 'json'
 require 'SysVIPC'
 include SysVIPC
+require 'ipc_transit/serialize'
+
 
 ##
 # Fast, brokerless message queueing
@@ -90,7 +92,7 @@ class IPCTransit
             self.unpack_data(args)
             #at this point I need to see if this is a remote transit
             #if it is, then do not thaw the message proper
-            args['message'] = self.transit_thaw(args)
+            args['message'] = transit_thaw(args)
         rescue Exception => msg
 #            puts "Exception: #{msg}"
 #            need to do something smarter with this
@@ -235,16 +237,6 @@ class IPCTransit
     end
 
 
-    def self.transit_freeze(args)
-        return args['message'].to_json
-    end
-
-    def self.transit_thaw(args)
-        return JSON.parse(args['serialized_message'])
-    end
-
-
-
 #returns a scalar, ready to be sent on the wire
 #it takes message and wire_meta_data
     def self.pack_message(args)
@@ -254,7 +246,7 @@ class IPCTransit
             next if @@ipc_transit_std_args[k]
             args['message']['.ipc_transit_meta'][k] = args[k]
         end
-        args['serialized_message'] = self.transit_freeze(args)
+        args['serialized_message'] = transit_freeze(args)
         self.serialize_wire_meta(args)
         l = args['serialized_wire_meta_data'].length
         args['serialized_wire_data'] = "#{l}:#{args['serialized_wire_meta_data']}#{args['serialized_message']}"
