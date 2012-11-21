@@ -28,12 +28,17 @@ def transit_thaw(args)
             serialize_type = args['wire_headers']['e']
         end
     end
+    begin
+        inflated = transit_inflate(args)
+    rescue Exception => msg
+        puts "transit_thaw exception: #{e}"
+    end
     case serialize_type
     when 'json'
-        args['thawed'] = JSON.parse(args['serialized_message'])
+        args['thawed'] = JSON.parse(inflated)
     when 'yaml'
-        args['thawed'] = YAML.load(args['serialized_message'])
+        args['thawed'] = YAML.load(inflated)
     end
-    return transit_inflate(args)
+    return args['thawed']
 end
 
