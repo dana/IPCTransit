@@ -2,6 +2,7 @@ Gem::Specification.new do |s|
   s.name               = 'ipc_transit'
   s.version            = '0.0.2'
   s.add_runtime_dependency 'json'
+  s.add_runtime_dependency 'yaml'
   s.add_runtime_dependency 'SysVIPC'
   s.executables        << 'trrecv'
   s.executables        << 'trsend'

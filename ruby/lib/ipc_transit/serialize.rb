@@ -1,5 +1,6 @@
 require 'rubygems'
 require 'json'
+require 'yaml'
 
 def transit_freeze(args)
     if args['e'].nil?
@@ -11,7 +12,7 @@ def transit_freeze(args)
     when 'json'
         return args['message'].to_json
     when 'yaml'
-        puts 'yaml'
+        return YAML.dump(args['message'])
     end
 end
 
@@ -29,7 +30,7 @@ def transit_thaw(args)
     when 'json'
         return JSON.parse(args['serialized_message'])
     when 'yaml'
-        puts 'yaml'
+        return YAML.load(args['serialized_message'])
     end
 end
 
