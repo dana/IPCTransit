@@ -1,4 +1,4 @@
-# IPCTransit v0.0.2
+# IPCTransit v0.0.3
 A high-performance, brokerless, cross-platform message queue system.
 
 ## Dependencies
@@ -26,7 +26,9 @@ require 'ipc_transit'
 IPCTransit.send(
     'message' => { 'something' => { 'very' => ['interesting']}},
     'qname' => 'somewhere_else',
-    'd' => 'some.remote.host')
+    'd' => 'some.remote.host',
+    'c' => 'zlib',
+    'e' => 'json')  #json is the default; YAML is also supported
 ```
 
 On 'some.remote.host':
@@ -69,23 +71,24 @@ with.
 
 ## TODO
 * Far more robust testing
+* Exception handling is exceptionally poor
+* Specific Exception: Queue full write
+* Specific Exception: Message too large for queue
 * Decouple the wire header arguments from their encoded name.  For example, 'd' is the destination field in the wire header, but the argument should be called 'destination' in the send method
-* Queue full write
-* Message too large for queue
+* Serialization and compression modules should be loaded only as needed
+* Allow user-specified masks for transit config files
+* Allow user-specified path for transit config files
 * Allow custom config directory path
 * Handle large messages
 * A lot more documentation
 * Perl implementation
 * Python implementation
-* Plugable encoding
-* Plugable compression
+* Plugable compression (DONE! zlib implemented at this time)
+* Plugable encoding (DONE! json and yaml implemented)
 * Crypto: message signing and verification
 * Crypto: message encryption and validation
 
 ## BUGS
 ### Ruby
 * Blocking receive on empty queue requires kill -9
-* Serialization and compression modules should be loaded only as needed
 * Should not arbitrarily use queue IDs; use ftok instead
-* Allow user-specified masks for transit config files
-* Allow user-specified path for transit config files
