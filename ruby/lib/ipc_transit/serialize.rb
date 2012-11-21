@@ -1,6 +1,7 @@
 require 'rubygems'
 require 'json'
 require 'yaml'
+require 'ipc_transit/compress'
 
 def transit_freeze(args)
     if args['e'].nil?
@@ -10,10 +11,11 @@ def transit_freeze(args)
     end
     case serialize_type
     when 'json'
-        return args['message'].to_json
+        args['frozen'] = args['message'].to_json
     when 'yaml'
-        return YAML.dump(args['message'])
+        args['frozen'] = YAML.dump(args['message'])
     end
+    return transit_deflate(args)
 end
 
 def transit_thaw(args)
@@ -28,9 +30,10 @@ def transit_thaw(args)
     end
     case serialize_type
     when 'json'
-        return JSON.parse(args['serialized_message'])
+        args['thawed'] = JSON.parse(args['serialized_message'])
     when 'yaml'
-        return YAML.load(args['serialized_message'])
+        args['thawed'] = YAML.load(args['serialized_message'])
     end
+    return transit_inflate(args)
 end
 
