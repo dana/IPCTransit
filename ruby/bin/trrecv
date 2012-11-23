@@ -1,16 +1,27 @@
 #!/usr/bin/env ruby
 require 'rubygems'
+require 'optparse'
 require 'ipc_transit'
 require 'json'
+
+options = {}
+
+OptionParser.new do |opts|
+    opts.banner = "Usage: trrecv [options] qname"
+    opts.on('-s[OPTIONAL]') do |s|
+        options['single'] = 1
+    end
+end.parse!
 
 qname = ARGV[0]
 nowait = ARGV[1]
 
-
-#puts qname
-#puts message
-
-while ret = IPCTransit.receive('qname' => qname, 'nowait' => 1)
+if options['single'] == 1
+    ret = IPCTransit.receive('qname' => qname, 'nowait' => 1)
     puts JSON.pretty_generate(ret)
+else
+    while ret = IPCTransit.receive('qname' => qname, 'nowait' => 1)
+        puts JSON.pretty_generate(ret)
+    end
 end
 
