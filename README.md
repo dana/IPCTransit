@@ -83,8 +83,8 @@ with.
 * A lot more documentation
 * Perl implementation
 * Python implementation
-* Plugable compression (DONE! zlib implemented at this time)
-* Plugable encoding (DONE! json and yaml implemented)
+* Plugable compression (partial: zlib implemented at this time; need to make it class-based)
+* Plugable encoding (partial: json and yaml implemented; need to make it class based)
 * Crypto: message signing and verification
 * Crypto: message encryption and validation
 
@@ -92,3 +92,4 @@ with.
 ### Ruby
 * Blocking receive on empty queue requires kill -9
 * Should not arbitrarily use queue IDs; use ftok instead
+* The created configuration directory's permissions are not wide-open
