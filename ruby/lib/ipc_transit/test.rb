@@ -10,7 +10,7 @@ end
 def run_daemon(prog)
     pid = fork
     if pid.nil? #child
-        exec "bin/#{prog}"
+        exec "ruby -Ilib bin/#{prog}"
         exit
     end
     return pid
