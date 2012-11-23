@@ -18,7 +18,7 @@ class IPCTransit
         $ipc_transit_config_path = '/tmp/ipc_transit'
     end
 
-    @@ipc_transit_wire_header_args = {
+    @@wire_header_args = {
         'e' => { #encoding
             'json' => 1,
             'yaml' => 1,
@@ -32,7 +32,7 @@ class IPCTransit
         't' => 1, #hop TTL
         'q' => 1, #destination qname
     }
-    @@ipc_transit_std_args = {
+    @@std_args = {
         'message' => 1,
         'qname' => 1,
         'nowait' => 1,
@@ -247,8 +247,8 @@ class IPCTransit
     def self.pack_message(args)
         args['message']['.ipc_transit_meta'] = {}
         args.keys.each do |k|
-            next if @@ipc_transit_wire_header_args[k]
-            next if @@ipc_transit_std_args[k]
+            next if @@wire_header_args[k]
+            next if @@std_args[k]
             args['message']['.ipc_transit_meta'][k] = args[k]
         end
         args['serialized_message'] = transit_freeze(args)
@@ -261,11 +261,11 @@ class IPCTransit
     def self.serialize_wire_meta(args)
         s = ''
         args.keys.each do |k|
-            if @@ipc_transit_wire_header_args[k]
+            if @@wire_header_args[k]
                 #make sure a valid value is passed in
-                if @@ipc_transit_wire_header_args[k] == 1
+                if @@wire_header_args[k] == 1
                     s = "#{s}#{k}=#{args[k]},"
-                elsif @@ipc_transit_wire_header_args[k][args[k]]
+                elsif @@wire_header_args[k][args[k]]
                     s = "#{s}#{k}=#{args[k]},"
                 else
                     raise "passed wire argument #{k} had value #{args[k]} not of allowed type"
