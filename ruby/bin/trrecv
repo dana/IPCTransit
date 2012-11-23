@@ -17,7 +17,6 @@ OptionParser.new do |opts|
 end.parse!
 
 qname = ARGV[0]
-nowait = ARGV[1]
 
 if options['single'] == 1
     ret = IPCTransit.receive('qname' => qname, 'nowait' => options['nowait'])
