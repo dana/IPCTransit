@@ -14,6 +14,10 @@ require 'ipc_transit/serialize'
 class IPCTransit
     @@queues = {}
 
+    if $ipc_transit_config_path.nil?
+        $ipc_transit_config_path = '/tmp/ipc_transit'
+    end
+
     @@ipc_transit_wire_header_args = {
         'e' => { #encoding
             'json' => 1,
@@ -187,7 +191,7 @@ class IPCTransit
         begin
             self.lock_dir()
             File.umask(0000)
-            file = File.open("/tmp/transit/#{qname}", 'w', 0666)
+            file = File.open("#{$ipc_transit_config_path}/#{qname}", 'w', 0666)
             new_qid = get_next_id
             file.puts("qid=#{new_qid}")
             file.puts("qname=#{qname}")
@@ -211,7 +215,7 @@ class IPCTransit
 
     def self.gather_queue_info()
         self.mk_queue_dir()
-        Dir.glob('/tmp/transit/*').each do |filename|
+        Dir.glob("#{$ipc_transit_config_path}/*").each do |filename|
             info = {}
             file = File.new(filename, 'r', 0666)
             while (line = file.gets)
@@ -232,7 +236,7 @@ class IPCTransit
 
     def self.mk_queue_dir()
         begin
-            Dir.mkdir('/tmp/transit', 0777)
+            Dir.mkdir($ipc_transit_config_path, 0777)
         rescue
         end
     end

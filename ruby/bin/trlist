@@ -1,7 +1,14 @@
 #!/usr/bin/env ruby
 require 'rubygems'
+require 'optparse'
+
 require 'ipc_transit'
 
+OptionParser.new do |opts|
+    opts.on('-p[OPTIONAL]') do |p|
+        $ipc_transit_config_path = p
+    end
+end.parse!
 
 IPCTransit.all_queues.each_pair do |qname, info|
     puts "#{qname} = #{info['count']}"

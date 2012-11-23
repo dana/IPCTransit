@@ -1,8 +1,9 @@
 #!/usr/bin/env ruby
 require 'rubygems'
 require 'optparse'
-require 'ipc_transit'
 require 'json'
+
+require 'ipc_transit'
 
 options = {}
 
@@ -13,6 +14,9 @@ OptionParser.new do |opts|
     end
     opts.on('-n[OPTIONAL]') do |n|
         options['nowait'] = 1
+    end
+    opts.on('-p[OPTIONAL]') do |p|
+        $ipc_transit_config_path = p
     end
 end.parse!
 
