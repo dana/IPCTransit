@@ -207,10 +207,10 @@ class IPCTransit
 
     def self.lock_dir()
         File.umask(0000)
-        File.open('/tmp/transit.lock', File::WRONLY|File::EXCL|File::CREAT, 0666)
+        File.open("#{$ipc_transit_config_path}/transit.lock", File::WRONLY|File::EXCL|File::CREAT, 0666)
     end
     def self.unlock_dir()
-        File.delete('/tmp/transit.lock')
+        File.delete("#{$ipc_transit_config_path}/transit.lock")
     end
 
     def self.gather_queue_info()
