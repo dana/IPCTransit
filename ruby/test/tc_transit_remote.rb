@@ -12,7 +12,7 @@ class TestIPCTransit < Test::Unit::TestCase
 
     def test_basic_remote
         drain_test_queue()
-        IPCTransit.send('message' => { 'foo' => 'bar' }, 'qname' => 'test_qname', 'd' => '127.0.0.1')
+        IPCTransit.send('message' => { 'foo' => 'bar' }, 'qname' => 'tr_dist_test_qname', 'd' => '127.0.0.1')
         ret = IPCTransit.receive('qname' => 'transitd', 'nowait' => 1)
         assert(ret, 'IPCTransit.receive returned true')
         assert_equal(ret['foo'], 'bar')
@@ -24,9 +24,9 @@ class TestIPCTransit < Test::Unit::TestCase
             @trserver_pid = run_daemon('trserver')
             @transitd_pid = run_daemon('transitd')
             sleep 2
-            IPCTransit.send('message' => { 'foo' => 'bar' }, 'qname' => 'test_qname', 'd' => '127.0.0.1')
+            IPCTransit.send('message' => { 'foo' => 'bar' }, 'qname' => 'tr_dist_test_qname', 'd' => '127.0.0.1')
             sleep 2
-            ret = IPCTransit.receive('qname' => 'test_qname', 'nowait' => 1)
+            ret = IPCTransit.receive('qname' => 'tr_dist_test_qname', 'nowait' => 1)
         rescue Exception => msg
             puts "Exception: #{msg}"
         end
