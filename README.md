@@ -71,8 +71,9 @@ with.
 
 ## TODO
 * Far more robust testing
+* A lot more documentation
 * Exception handling is exceptionally poor
-* Specific Exception: Queue full write
+* Specific Exception: Queue full write. Should block if nowait is false, throw if nowait is true
 * Specific Exception: Message too large for queue
 * Local (in-process) delivery
 * Serialization and compression modules should be loaded only as needed
@@ -80,13 +81,12 @@ with.
 * Allow user-specified path for transit config files
 * Allow custom config directory path
 * Handle large messages
-* A lot more documentation
-* Perl implementation
-* Python implementation
 * Plugable compression (partial: zlib implemented at this time; need to make it class-based)
 * Plugable encoding (partial: json and yaml implemented; need to make it class based)
 * Crypto: message signing and verification
 * Crypto: message encryption and validation
+* Perl implementation
+* Python implementation
 
 ## BUGS
 ### Ruby
