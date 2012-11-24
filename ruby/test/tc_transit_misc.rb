@@ -4,7 +4,7 @@ require 'ipc_transit/test'
 
 class TestIPCTransit < Test::Unit::TestCase
     def test_remove_queue
-        drain_test_queue()
+        clear_test_queue()
         IPCTransit.send('message' => { 'foo' => 'bar' }, 'qname' => 'tr_dist_test_qname')
         all_info = IPCTransit.all_queue_info()
         assert(all_info, 'We received some queue info')

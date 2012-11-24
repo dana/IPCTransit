@@ -4,7 +4,7 @@ require 'ipc_transit/test'
 
 class TestIPCTransit < Test::Unit::TestCase
     def test_typical
-        drain_test_queue()
+        clear_test_queue()
         IPCTransit.send('message' => { 'foo' => 'bar' }, 'qname' => 'tr_dist_test_qname')
         ret = IPCTransit.receive('qname' => 'tr_dist_test_qname', 'nowait' => 1)
         assert(ret, 'IPCTransit.receive returned true')
@@ -12,7 +12,7 @@ class TestIPCTransit < Test::Unit::TestCase
     end
 
     def test_wire_raw
-        drain_test_queue()
+        clear_test_queue()
         IPCTransit.send('message' => { 'foo' => 'bar' }, 'qname' => 'tr_dist_test_qname', 'encoding' => 'json', 'compression' => 'none')
         ret = IPCTransit.receive('qname' => 'tr_dist_test_qname', 'raw' => 1, 'nowait' => 1)
         assert(ret, 'IPCTransit.receive returned true')
@@ -21,7 +21,7 @@ class TestIPCTransit < Test::Unit::TestCase
         assert_equal(ret['wire_headers']['c'], 'none')
     end
     def test_message_meta
-        drain_test_queue()
+        clear_test_queue()
         IPCTransit.send( 'qname' => 'tr_dist_test_qname',
                 'message' => { 'foo' => 'bar' },
                 'encoding' => 'json',
@@ -40,7 +40,7 @@ class TestIPCTransit < Test::Unit::TestCase
     end
 
     def test_get_queue_info
-        drain_test_queue()
+        clear_test_queue()
         all_info = IPCTransit.all_queue_info()
         IPCTransit.send('message' => { 'foo' => 'bar' }, 'qname' => 'tr_dist_test_qname')
         assert(all_info, 'We received some queue info')
@@ -55,7 +55,7 @@ class TestIPCTransit < Test::Unit::TestCase
     end
 
     def test_all_queues
-        drain_test_queue()
+        clear_test_queue()
         IPCTransit.send('message' => { 'foo' => 'bar' }, 'qname' => 'tr_dist_test_qname')
         ret = IPCTransit.all_queues()
         assert(ret, 'IPCTransit.all_queues returned true')

@@ -4,7 +4,7 @@ require 'ipc_transit/test'
 
 class TestIPCTransit < Test::Unit::TestCase
     def test_zlib_typical
-        drain_test_queue()
+        clear_test_queue()
         IPCTransit.send('message' => { 'foo' => 'bar' }, 'qname' => 'tr_dist_test_qname', 'compression' => 'zlib', 'encoding' => 'json')
         ret = IPCTransit.receive('qname' => 'tr_dist_test_qname', 'nowait' => 1)
         assert(ret, 'IPCTransit.receive returned true')
@@ -12,7 +12,7 @@ class TestIPCTransit < Test::Unit::TestCase
     end
 
     def test_zlib_wire_raw
-        drain_test_queue()
+        clear_test_queue()
         IPCTransit.send('message' => { 'foo' => 'bar' }, 'qname' => 'tr_dist_test_qname', 'compression' => 'zlib')
         ret = IPCTransit.receive('qname' => 'tr_dist_test_qname', 'raw' => 1, 'nowait' => 1)
         assert(ret, 'IPCTransit.receive returned true')
@@ -20,7 +20,7 @@ class TestIPCTransit < Test::Unit::TestCase
         assert_equal(ret['wire_headers']['c'], 'zlib')
     end
     def test_zlib_message_meta
-        drain_test_queue()
+        clear_test_queue()
         IPCTransit.send( 'qname' => 'tr_dist_test_qname',
                 'message' => { 'foo' => 'bar' },
                 'encoding' => 'json',

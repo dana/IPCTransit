@@ -1,10 +1,8 @@
 $ipc_transit_config_path = '/tmp/test_ipc_transit'
 
-#kind of ghetto, but I don't have a better way right now
-def drain_test_queue
+def clear_test_queue
     begin
-        while ret = IPCTransit.receive('qname' => 'test_qname', 'nowait' => 1)
-        end
+        IPCTransit.remove('qname' => 'tr_dist_test_qname')
     rescue Exception => msg
     end
 end

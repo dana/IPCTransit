@@ -11,7 +11,7 @@ class TestIPCTransit < Test::Unit::TestCase
     end
 
     def test_basic_remote
-        drain_test_queue()
+        clear_test_queue()
         IPCTransit.send('message' => { 'foo' => 'bar' }, 'qname' => 'tr_dist_test_qname', 'destination' => '127.0.0.1')
         ret = IPCTransit.receive('qname' => 'transitd', 'nowait' => 1)
         assert(ret, 'IPCTransit.receive returned true')
@@ -19,7 +19,7 @@ class TestIPCTransit < Test::Unit::TestCase
     end
 
     def test_full_remote
-        drain_test_queue()
+        clear_test_queue()
         begin
             @trserver_pid = run_daemon('trserver')
             @transitd_pid = run_daemon('transitd')
