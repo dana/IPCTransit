@@ -90,5 +90,4 @@ with.
 ## BUGS
 ### Ruby
 * Blocking receive on empty queue requires kill -9
-* Should not arbitrarily use queue IDs; use ftok instead
 * The created configuration directory's permissions are not wide-open

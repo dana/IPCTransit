@@ -200,7 +200,7 @@ class IPCTransit
             self.lock_dir()
             File.umask(0000)
             file = File.open("#{$ipc_transit_config_path}/#{qname}", 'w', 0666)
-            new_qid = get_next_id
+            new_qid = ftok("#{$ipc_transit_config_path}/#{qname}", 1)
             file.puts("qid=#{new_qid}")
             file.puts("qname=#{qname}")
             file.close
