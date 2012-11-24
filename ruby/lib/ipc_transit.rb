@@ -177,15 +177,6 @@ class IPCTransit
 
     private
 
-    def self.get_next_id
-        new_id = 1
-        @@queues.each_pair do |k,v|
-            if v['qid'] > new_id
-                new_id = v['qid']
-            end
-        end
-        return new_id + 1
-    end
     def self.get_queue_id(args)
         qname = args['qname']
         self.mk_queue_dir()
