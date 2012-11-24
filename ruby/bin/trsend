@@ -18,6 +18,6 @@ dest = ARGV[2]
 if dest.nil?
     ret = IPCTransit.send('message' => message, 'qname' => qname)
 else
-    ret = IPCTransit.send('message' => message, 'qname' => qname, 'd' => dest)
+    ret = IPCTransit.send('message' => message, 'qname' => qname, 'destination' => dest)
 end
 puts ret

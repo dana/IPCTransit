@@ -18,6 +18,11 @@ class IPCTransit
         $ipc_transit_config_path = '/tmp/ipc_transit'
     end
 
+    @@wire_header_arg_translate = {
+        'destination' => 'd',
+        'compression' => 'c',
+        'encoding' => 'e'
+    }
     @@wire_header_args = {
         'e' => { #encoding
             'json' => 1,
@@ -46,12 +51,15 @@ class IPCTransit
     #  message - hash reference
     #  qname - name of queue to send to
     #  nowait - do not block if the queue is full (optional)
+    #  encoding - currently JSON and YAML are implemented (optional, defaults to JSON)
+    #  compression - currently none and zlib are implemented (optional, defaults to none)
+    #  destination - IP or name of remote destination (optional)
 
     def self.send(args)
         ret = nil
         flags = IPC_NOWAIT
         begin
-            if args['d']
+            if args['destination']
                 args['q'] = args['qname']
                 args['qname'] = 'transitd'
                 if not args['t']
@@ -246,6 +254,10 @@ class IPCTransit
 #it takes message and wire_meta_data
     def self.pack_message(args)
         args['message']['.ipc_transit_meta'] = {}
+        @@wire_header_arg_translate.keys.each do |k|
+            next unless args[k]
+            args[@@wire_header_arg_translate[k]] = args[k]
+        end
         args.keys.each do |k|
             next if @@wire_header_args[k]
             next if @@std_args[k]

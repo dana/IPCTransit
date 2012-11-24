@@ -26,9 +26,9 @@ require 'ipc_transit'
 IPCTransit.send(
     'message' => { 'something' => { 'very' => ['interesting']}},
     'qname' => 'somewhere_else',
-    'd' => 'some.remote.host',
-    'c' => 'zlib',
-    'e' => 'json')  #json is the default; YAML is also supported
+    'destination' => 'some.remote.host',
+    'compression' => 'zlib',
+    'encoding' => 'json')  #json is the default; YAML is also supported
 ```
 
 On 'some.remote.host':
@@ -74,7 +74,6 @@ with.
 * Exception handling is exceptionally poor
 * Specific Exception: Queue full write
 * Specific Exception: Message too large for queue
-* Decouple the wire header arguments from their encoded name.  For example, 'd' is the destination field in the wire header, but the argument should be called 'destination' in the send method
 * Serialization and compression modules should be loaded only as needed
 * Allow user-specified masks for transit config files
 * Allow user-specified path for transit config files

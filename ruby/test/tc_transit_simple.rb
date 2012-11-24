@@ -13,7 +13,7 @@ class TestIPCTransit < Test::Unit::TestCase
 
     def test_wire_raw
         drain_test_queue()
-        IPCTransit.send('message' => { 'foo' => 'bar' }, 'qname' => 'tr_dist_test_qname', 'e' => 'json', 'c' => 'none')
+        IPCTransit.send('message' => { 'foo' => 'bar' }, 'qname' => 'tr_dist_test_qname', 'encoding' => 'json', 'compression' => 'none')
         ret = IPCTransit.receive('qname' => 'tr_dist_test_qname', 'raw' => 1, 'nowait' => 1)
         assert(ret, 'IPCTransit.receive returned true')
         assert_equal(ret['message']['foo'], 'bar')
@@ -24,8 +24,8 @@ class TestIPCTransit < Test::Unit::TestCase
         drain_test_queue()
         IPCTransit.send( 'qname' => 'tr_dist_test_qname',
                 'message' => { 'foo' => 'bar' },
-                'e' => 'json',
-                'c' => 'none',
+                'encoding' => 'json',
+                'compression' => 'none',
                 'something' => 'else',
                 'x' => { 'this' => 'that' },
                 'once' => ['more',2]
