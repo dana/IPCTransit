@@ -83,6 +83,7 @@ class IPCTransit
     #
     # Arguments:
     #  qname - name of queue to remove
+
     def self.remove(args)
         qname = args['qname']
         key = self.get_queue_id(args)

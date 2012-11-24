@@ -74,6 +74,7 @@ with.
 * Exception handling is exceptionally poor
 * Specific Exception: Queue full write
 * Specific Exception: Message too large for queue
+* Local (in-process) delivery
 * Serialization and compression modules should be loaded only as needed
 * Allow user-specified masks for transit config files
 * Allow user-specified path for transit config files

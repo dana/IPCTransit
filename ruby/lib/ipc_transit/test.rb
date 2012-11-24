@@ -15,7 +15,7 @@ def run_daemon(prog)
     end
     return pid
 end
+
 def kill_daemon(pid)
     Process.kill(9, pid)
 end
-
