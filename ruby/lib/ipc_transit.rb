@@ -79,6 +79,26 @@ class IPCTransit
     end
 
     ##
+    #  Remove a queue
+    #
+    # Arguments:
+    #  qname - name of queue to remove
+    def self.remove(args)
+        qname = args['qname']
+        begin
+            key = self.get_queue_id(args)
+            mq = MessageQueue.new(key, 0)
+            mq.ipc_rmid
+            File.delete("#{$ipc_transit_config_path}/#{qname}")
+            @@queues.delete(qname)
+        rescue Exception => msg
+            puts "Exception: #{msg}"
+#            need to do something smarter with this
+        end
+    end
+
+
+    ##
     #  Receive a message from a queue
     #
     # Arguments:
