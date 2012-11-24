@@ -1,4 +1,4 @@
-# IPCTransit v0.0.3
+# IPCTransit v0.1
 A high-performance, brokerless, cross-platform message queue system.
 
 ## Dependencies

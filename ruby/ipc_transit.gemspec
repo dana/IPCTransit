@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name               = 'ipc_transit'
-  s.version            = '0.0.3'
+  s.version            = '0.1'
   s.add_runtime_dependency 'json'
   s.add_runtime_dependency 'yaml'
   s.add_runtime_dependency 'zlib'
@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new('>= 0') if s.respond_to? :required_rubygems_version=
   s.authors = ['Dana M. Diederich']
-  s.date = %q{2012-11-17}
+  s.date = %q{2012-11-23}
   s.description = %q{Brokerless Message Queue}
   s.email = %q{diederich@gmail.com}
   s.files = ['Rakefile', 'lib/ipc_transit.rb', 'lib/ipc_transit/test.rb', 'lib/ipc_transit/serialize.rb', 'lib/ipc_transit/compress.rb', 'bin/trrecv', 'bin/trsend', 'bin/trlist','bin/transitd','bin/trserver']
